@@ -32,6 +32,16 @@ const resolvers = {
         employees: async () => {
             return await Employee.find();
         },
+        employeeById: async (_, { id }) => {
+            return await Employee.findById(id);
+        },
+        searchEmployeesByFilter: async (_, { designation, department }) => {
+            const filter = {};
+            if (designation) filter.designation = designation;
+            if (department) filter.department = department;
+
+            return await Employee.find(filter);
+        },
     },
 
     Mutation: {
@@ -52,6 +62,33 @@ const resolvers = {
 
             return { status: true, message: "Signup successful", token, user };
         },
+        addEmployee: async (_, { input }) => {
+            const employee = await Employee.create({
+                ...input,
+                date_of_joining: new Date(input.date_of_joining),
+            });
+
+            return employee;
+        },
+        updateEmployeeById: async (_, { id, input }) => {
+            const updateData = { ...input };
+
+            if (input.date_of_joining) {
+                updateData.date_of_joining = new Date(input.date_of_joining);
+            }
+
+            const updated = await Employee.findByIdAndUpdate(id, updateData, {
+                new: true,
+                runValidators: true,
+            });
+
+            return updated;
+        },
+        deleteEmployeeById: async (_, { id }) => {
+            const deleted = await Employee.findByIdAndDelete(id);
+            return deleted;
+        },
+
     },
 };
 

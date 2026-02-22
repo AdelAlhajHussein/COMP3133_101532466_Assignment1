@@ -35,11 +35,15 @@ const typeDefs = gql`
   test: String
   login(usernameOrEmail: String!, password: String!): AuthPayload!
   employees: [Employee]
+  employeeById(id: ID!): Employee
+  searchEmployeesByFilter(designation: String, department: String): [Employee]
   }
 
   type Mutation {
   signup(username: String!, email: String!, password: String!): AuthPayload!
   addEmployee(input: EmployeeInput!): Employee
+  updateEmployeeById(id: ID!, input: UpdateEmployeeInput!): Employee
+  deleteEmployeeById(id: ID!): Employee
   }
   
   input EmployeeInput {
@@ -53,6 +57,17 @@ const typeDefs = gql`
   department: String!
   employee_photo: String
   }
+  input UpdateEmployeeInput {
+  first_name: String
+  last_name: String
+  email: String
+  gender: String
+  designation: String
+  salary: Float
+  date_of_joining: String
+  department: String
+  employee_photo: String
+}
 `;
 
 module.exports = typeDefs;
