@@ -1,21 +1,12 @@
 const express = require("express");
-const { ApolloServer, gql } = require("apollo-server-express");
+const { ApolloServer } = require("apollo-server-express");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
+const typeDefs = require("./schema/typeDefs");
+const resolvers = require("./resolvers");
+
 const app = express();
-
-const typeDefs = gql`
-  type Query {
-    test: String
-  }
-`;
-
-const resolvers = {
-    Query: {
-        test: () => "Server working",
-    },
-};
 
 async function startServer() {
     await mongoose.connect(process.env.MONGO_URI);
